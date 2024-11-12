@@ -1,3 +1,5 @@
+"use client";
+
 import {
   QuickEntry,
   RecentEntries,
@@ -5,8 +7,11 @@ import {
 } from "@/components/dashboard";
 import { ChallengeManager } from "@/components/dashboard/ChallengeManager";
 import { EntryManager } from "@/components/dashboard/EntryManager";
+import { useIsClient } from "@uidotdev/usehooks";
 
 export default function DashboardPage() {
+  const isClient = useIsClient();
+  if (!isClient) return null;
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">Dashboard</h1>

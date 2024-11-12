@@ -34,18 +34,19 @@ export function TimeInsights() {
   const filteredEntries = useMemo(() => {
     const now = new Date();
     const periodStart = new Date(
-      now.getTime() - getPeriodDuration(selectedPeriod)
+      now.getTime() - getPeriodDuration(selectedPeriod),
     );
     return timeEntries.filter(
       (entry) =>
         new Date(entry.date) >= periodStart &&
-        (selectedChallenge === "all" || entry.challengeId === selectedChallenge)
+        (selectedChallenge === "all" ||
+          entry.challengeId === selectedChallenge),
     );
   }, [timeEntries, selectedPeriod, selectedChallenge]);
 
   const totalTime = useMemo(
     () => filteredEntries.reduce((sum, entry) => sum + entry.duration, 0),
-    [filteredEntries]
+    [filteredEntries],
   );
 
   const timeByActivity = useMemo(() => {
@@ -54,7 +55,7 @@ export function TimeInsights() {
         acc[entry.activity] = (acc[entry.activity] || 0) + entry.duration;
         return acc;
       },
-      {} as Record<string, number>
+      {} as Record<string, number>,
     );
     return Object.entries(timeMap).map(([activity, duration]) => ({
       activity,
@@ -66,21 +67,21 @@ export function TimeInsights() {
     () =>
       challenges.map((challenge) => {
         const challengeEntries = filteredEntries.filter(
-          (entry) => entry.challengeId === challenge.id
+          (entry) => entry.challengeId === challenge.id,
         );
         const totalDuration = challengeEntries.reduce(
           (sum, entry) => sum + entry.duration,
-          0
+          0,
         );
         return {
           ...challenge,
           progress: Math.min(
             100,
-            (totalDuration / (challenge?.targetDays || 0) * 60) * 100
+            (totalDuration / (challenge?.targetDays || 0)) * 60 * 100,
           ),
         };
       }),
-    [challenges, filteredEntries]
+    [challenges, filteredEntries],
   );
 
   return (

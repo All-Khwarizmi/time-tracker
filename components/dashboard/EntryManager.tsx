@@ -36,8 +36,8 @@ export function EntryManager() {
   const handleSave = (updatedEntry: TimeEntry) => {
     setTimeEntries(
       timeEntries.map((entry) =>
-        entry.id === updatedEntry.id ? updatedEntry : entry
-      )
+        entry.id === updatedEntry.id ? updatedEntry : entry,
+      ),
     );
     setIsDialogOpen(false);
     setEditingEntry(null);

@@ -20,12 +20,12 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 export function ChallengeManager() {
   const [challenges, setChallenges] = useLocalStorage<Challenge[]>(
     "challenges",
-    []
+    [],
   );
   const [newChallenge, setNewChallenge] = useState<Partial<Challenge>>({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingChallenge, setEditingChallenge] = useState<Challenge | null>(
-    null
+    null,
   );
 
   const handleCreateChallenge = (e: React.FormEvent) => {
@@ -54,8 +54,8 @@ export function ChallengeManager() {
     if (editingChallenge) {
       setChallenges(
         challenges.map((c) =>
-          c.id === editingChallenge.id ? editingChallenge : c
-        )
+          c.id === editingChallenge.id ? editingChallenge : c,
+        ),
       );
       setEditingChallenge(null);
       setIsDialogOpen(false);

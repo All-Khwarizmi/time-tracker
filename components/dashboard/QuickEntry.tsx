@@ -26,15 +26,15 @@ export function QuickEntry() {
   const [activity, setActivity] = useState("");
   const [duration, setDuration] = useState("");
   const [durationUnit, setDurationUnit] = useState<"minutes" | "hours">(
-    "minutes"
+    "minutes",
   );
   const [energyLevel, setEnergyLevel] = useState(3);
   const [focusLevel, setFocusLevel] = useState(3);
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(
-    null
+    null,
   );
   const [selectedChallengeId, setSelectedChallengeId] = useState<string | null>(
-    null
+    null,
   );
   const [timeEntries, setTimeEntries] = useTimeEntries();
   const [sessions, setSessions] = useSessions();

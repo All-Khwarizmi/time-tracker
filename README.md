@@ -1,6 +1,4 @@
-
-
- # TimeTrack & Challenge Logger
+# TimeTrack & Challenge Logger
 
 ## 📝 Vue d'ensemble
 
@@ -23,7 +21,6 @@ TimeTrack & Challenge Logger est une application de suivi du temps et des défis
 git clone [https://github.com/All-Khwarizmi/time-tracker.git](https://github.com/All-Khwarizmi/time-tracker.git)
 
 ```
- 
 
 2. Naviguez dans le dossier du projet :
 
@@ -32,7 +29,6 @@ git clone [https://github.com/All-Khwarizmi/time-tracker.git](https://github.com
 cd timetrack-challenge-logger
 
 ```
- 
 
 3. Installez les dépendances :
 
@@ -41,7 +37,6 @@ cd timetrack-challenge-logger
 npm install
 
 ```
- 
 
 4. Lancez l'application en mode développement :
 
@@ -50,7 +45,6 @@ npm install
 npm run dev
 
 ```
- 
 
 5. Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur pour voir l'application.
 
@@ -64,31 +58,37 @@ npm run dev
 ## 🛣 Roadmap
 
 ### Version 1.1
+
 - [ ] Amélioration de la persistance des données
 - Implémentation d'une solution de stockage plus robuste (ex: IndexedDB)
 - Ajout d'une fonctionnalité de sauvegarde/restauration des données
 
 ### Version 1.2
+
 - [ ] Authentification des utilisateurs
 - Mise en place d'un système d'authentification (ex: Auth0, Firebase Auth)
 - Profils utilisateurs personnalisés
 
 ### Version 1.3
+
 - [ ] Synchronisation des données
 - Synchronisation des données entre différents appareils
 - Option de sauvegarde dans le cloud (ex: Google Drive, Dropbox)
 
 ### Version 1.4
+
 - [ ] Rapports et analyses avancées
 - Génération de rapports hebdomadaires/mensuels
 - Visualisations de données plus détaillées (ex: heatmaps, graphiques de tendances)
 
 ### Version 1.5
+
 - [ ] Intégrations externes
 - Intégration avec des outils de gestion de projet (ex: Trello, Jira)
 - Export des données vers des applications de calendrier
 
 ### Version 2.0
+
 - [ ] Application mobile
 - Développement d'une version mobile native ou PWA
 - Synchronisation en temps réel entre les versions web et mobile
@@ -100,5 +100,3 @@ Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou à
 ## 📄 Licence
 
 Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
-
-
