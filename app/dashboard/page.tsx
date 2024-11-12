@@ -1,4 +1,8 @@
-import { QuickEntry, RecentEntries } from "@/components/dashboard";
+import {
+  QuickEntry,
+  RecentEntries,
+  StartSession,
+} from "@/components/dashboard";
 
 export default function DashboardPage() {
   return (
@@ -7,6 +11,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <QuickEntry />
         <RecentEntries />
+        <StartSession />
       </div>
     </div>
   );

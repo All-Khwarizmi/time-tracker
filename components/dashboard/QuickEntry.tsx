@@ -10,6 +10,14 @@ import { TimeEntry } from "@/lib/types";
 import { DurationInput } from "./DurationInput";
 import { EnergyLevel } from "./EnergyLevel";
 import { FocusLevel } from "./FocusLevel";
+import { useSessions } from "@/lib/hooks/use-sessions";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@components/ui/select";
 
 const MAX_RECENT_ACTIVITIES = 5;
 
@@ -21,7 +29,11 @@ export function QuickEntry() {
   );
   const [energyLevel, setEnergyLevel] = useState(3);
   const [focusLevel, setFocusLevel] = useState(3);
+  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(
+    null
+  );
   const [timeEntries, setTimeEntries] = useTimeEntries();
+  const [sessions, setSessions] = useSessions();
 
   const recentActivities = useMemo(() => {
     const activities = timeEntries.map((entry) => entry.activity);
@@ -32,24 +44,52 @@ export function QuickEntry() {
     e.preventDefault();
     const durationInMinutes =
       durationUnit === "hours" ? parseFloat(duration) * 60 : parseInt(duration);
-    const newEntry: TimeEntry = {
-      id: uuidv4(),
-      date: new Date().toISOString(),
-      activity,
-      duration: durationInMinutes,
-      energyLevel,
-      focusLevel,
-      tags: [],
-    };
-    setTimeEntries([...timeEntries, newEntry]);
+
+    if (selectedSessionId) {
+      const session = sessions.find((s) => s.id === selectedSessionId);
+      if (session) {
+        const newEntry: TimeEntry = {
+          id: uuidv4(),
+          date: session.startTime,
+          activity: session.activity,
+          duration: durationInMinutes,
+          energyLevel,
+          focusLevel,
+          tags: session.tags,
+        };
+        setTimeEntries([...timeEntries, newEntry]);
+        setSessions(sessions.filter((s) => s.id !== selectedSessionId));
+      }
+    } else {
+      const newEntry: TimeEntry = {
+        id: uuidv4(),
+        date: new Date().toISOString(),
+        activity,
+        duration: durationInMinutes,
+        energyLevel,
+        focusLevel,
+        tags: [],
+      };
+      setTimeEntries([...timeEntries, newEntry]);
+    }
+
     setActivity("");
     setDuration("");
     setEnergyLevel(3);
     setFocusLevel(3);
+    setSelectedSessionId(null);
   };
 
   const handleActivityClick = (selectedActivity: string) => {
     setActivity(selectedActivity);
+  };
+
+  const handleSessionSelect = (sessionId: string) => {
+    const session = sessions.find((s) => s.id === sessionId);
+    if (session) {
+      setActivity(session.activity);
+      setSelectedSessionId(sessionId);
+    }
   };
 
   return (
@@ -79,6 +119,21 @@ export function QuickEntry() {
             </Button>
           ))}
         </div>
+        {sessions.length > 0 && (
+          <Select onValueChange={handleSessionSelect}>
+            <SelectTrigger>
+              <SelectValue placeholder="Complete a session" />
+            </SelectTrigger>
+            <SelectContent>
+              {sessions.map((session) => (
+                <SelectItem key={session.id} value={session.id}>
+                  {session.activity} (Started:{" "}
+                  {new Date(session.startTime).toLocaleString()})
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
         <DurationInput
           duration={duration}
           durationUnit={durationUnit}
@@ -88,7 +143,7 @@ export function QuickEntry() {
         <EnergyLevel value={energyLevel} onChange={setEnergyLevel} />
         <FocusLevel value={focusLevel} onChange={setFocusLevel} />
         <Button type="submit" className="w-full">
-          Add Entry
+          {selectedSessionId ? "Complete Session" : "Add Entry"}
         </Button>
       </form>
     </Card>

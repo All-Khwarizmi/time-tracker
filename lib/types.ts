@@ -20,3 +20,16 @@ export interface Challenge {
   totalDays: number;
   color: string;
 }
+
+export interface Session {
+  id: string;
+  activity: string;
+  startTime: string;
+  endTime?: string;
+  duration?: number;
+  energyLevel?: number;
+  focusLevel?: number;
+  challengeId?: string;
+  notes?: string;
+  tags: string[];
+}
