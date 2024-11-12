@@ -3,36 +3,32 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { v4 as uuidv4 } from "uuid";
 import { useTimeEntries } from "@/lib/hooks/use-time-entries";
 import { TimeEntry, Challenge } from "@/lib/types";
 import { EnergyLevel } from "./EnergyLevel";
 import { FocusLevel } from "./FocusLevel";
-// import { useSessions } from "@/lib/hooks/use-sessions";
 import { useLocalStorage } from "@uidotdev/usehooks";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 import { DatePicker } from "@/components/ui/date-picker";
-import { TimePicker } from "@/components/ui/time-picker";
 import { TagInput } from "@/components/ui/tag-input";
+import { ActivityInput } from "./ActivityInput";
+import { TimeInputTabs } from "./TimeInputTabs";
+import { ChallengeSelect } from "./ChallengeSelect";
+import { LocationInput } from "./LocationInput";
+import { NotesInput } from "./NotesInput";
 
 export function QuickEntry() {
   const [activity, setActivity] = useState("");
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [startTime, setStartTime] = useState<Date>(new Date());
   const [endTime, setEndTime] = useState<Date>(new Date());
+  const [duration, setDuration] = useState("");
+  const [durationUnit, setDurationUnit] = useState<"minutes" | "hours">(
+    "minutes"
+  );
   const [energyLevel, setEnergyLevel] = useState(3);
   const [focusLevel, setFocusLevel] = useState(3);
-  // const [selectedSessionId, setSelectedSessionId] = useState<string | null>(
-  //   null
-  // );
   const [selectedChallengeId, setSelectedChallengeId] = useState<string | null>(
     null
   );
@@ -40,29 +36,54 @@ export function QuickEntry() {
   const [location, setLocation] = useState("");
   const [notes, setNotes] = useState("");
   const [timeEntries, setTimeEntries] = useTimeEntries();
-  // const [sessions, setSessions] = useSessions();
   const [challenges] = useLocalStorage<Challenge[]>("challenges", []);
+  const [timeInputMethod] = useState<"precise" | "duration">("precise");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const duration = Math.round(
-      (endTime.getTime() - startTime.getTime()) / 60000
-    ); // Duration in minutes
+    let newEntry: TimeEntry;
 
-    const newEntry: TimeEntry = {
-      id: uuidv4(),
-      date: date?.toISOString().split("T")[0] ?? "",
-      activity,
-      startTime: startTime.toISOString(),
-      endTime: endTime.toISOString(),
-      duration,
-      energyLevel,
-      focusLevel,
-      challengeId: selectedChallengeId || undefined,
-      tags,
-      location: location || undefined,
-      notes: notes || undefined,
-    };
+    if (timeInputMethod === "precise") {
+      const calculatedDuration = Math.round(
+        (endTime.getTime() - startTime.getTime()) / 60000
+      ); // Duration in minutes
+      newEntry = {
+        id: uuidv4(),
+        date: date?.toISOString().split("T")[0] ?? "",
+        activity,
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString(),
+        duration: calculatedDuration,
+        energyLevel,
+        focusLevel,
+        challengeId: selectedChallengeId || undefined,
+        tags,
+        location: location || undefined,
+        notes: notes || undefined,
+      };
+    } else {
+      const durationInMinutes =
+        durationUnit === "hours"
+          ? parseFloat(duration) * 60
+          : parseInt(duration);
+      const calculatedEndTime = new Date(
+        startTime.getTime() + durationInMinutes * 60000
+      );
+      newEntry = {
+        id: uuidv4(),
+        date: date?.toISOString().split("T")[0] ?? "",
+        activity,
+        startTime: startTime.toISOString(),
+        endTime: calculatedEndTime.toISOString(),
+        duration: durationInMinutes,
+        energyLevel,
+        focusLevel,
+        challengeId: selectedChallengeId || undefined,
+        tags,
+        location: location || undefined,
+        notes: notes || undefined,
+      };
+    }
 
     setTimeEntries([...timeEntries, newEntry]);
 
@@ -71,9 +92,9 @@ export function QuickEntry() {
     setDate(new Date());
     setStartTime(new Date());
     setEndTime(new Date());
+    setDuration("");
     setEnergyLevel(3);
     setFocusLevel(3);
-    // setSelectedSessionId(null);
     setSelectedChallengeId(null);
     setTags([]);
     setLocation("");
@@ -84,64 +105,32 @@ export function QuickEntry() {
     <Card className="p-4">
       <h2 className="text-lg font-semibold mb-4">Quick Entry</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Input
-          type="text"
-          placeholder="Activity"
-          value={activity}
-          onChange={(e) => setActivity(e.target.value)}
-          required
-          className="w-full"
-        />
-
+        <ActivityInput value={activity} onChange={setActivity} />
         <DatePicker
           selected={date}
           onChange={(newDate) => setDate(newDate)}
           className="w-full"
         />
-        <div className="flex space-x-2">
-          <TimePicker
-            selected={startTime}
-            onChange={(time: Date) => setStartTime(time)}
-            className="w-1/2"
-          />
-          <TimePicker
-            selected={endTime}
-            onChange={(time: Date) => setEndTime(time)}
-            className="w-1/2"
-          />
-        </div>
+        <TimeInputTabs
+          startTime={startTime}
+          endTime={endTime}
+          duration={duration}
+          durationUnit={durationUnit}
+          onStartTimeChange={setStartTime}
+          onEndTimeChange={setEndTime}
+          onDurationChange={setDuration}
+          onDurationUnitChange={setDurationUnit}
+        />
         <EnergyLevel value={energyLevel} onChange={setEnergyLevel} />
         <FocusLevel value={focusLevel} onChange={setFocusLevel} />
-        <Select
-          value={selectedChallengeId || ""}
-          onValueChange={setSelectedChallengeId}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select a challenge (optional)" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="optional">No challenge</SelectItem>
-            {challenges.map((challenge) => (
-              <SelectItem key={challenge.id} value={challenge.id}>
-                {challenge.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <ChallengeSelect
+          challenges={challenges}
+          selectedChallengeId={selectedChallengeId}
+          onChallengeSelect={setSelectedChallengeId}
+        />
         <TagInput value={tags} onChange={setTags} placeholder="Add tags" />
-        <Input
-          type="text"
-          placeholder="Location (optional)"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          className="w-full"
-        />
-        <textarea
-          placeholder="Notes (optional)"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          className="w-full p-2 border rounded"
-        />
+        <LocationInput value={location} onChange={setLocation} />
+        <NotesInput value={notes} onChange={setNotes} />
         <Button type="submit" className="w-full">
           Add Entry
         </Button>
