@@ -3,6 +3,7 @@ import {
   RecentEntries,
   StartSession,
 } from "@/components/dashboard";
+import { ChallengeManager } from "@/components/dashboard/ChallengeManager";
 import { EntryManager } from "@/components/dashboard/EntryManager";
 
 export default function DashboardPage() {
@@ -14,6 +15,7 @@ export default function DashboardPage() {
         <RecentEntries />
         <StartSession />
         <EntryManager />
+        <ChallengeManager />
       </div>
     </div>
   );
