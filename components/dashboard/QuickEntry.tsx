@@ -6,18 +6,19 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { v4 as uuidv4 } from "uuid";
 import { useTimeEntries } from "@/lib/hooks/use-time-entries";
-import { TimeEntry } from "@/lib/types";
+import { useSessions } from "@/lib/hooks/use-sessions";
+import { useLocalStorage } from "@uidotdev/usehooks";
+import { TimeEntry, Challenge } from "@/lib/types";
 import { DurationInput } from "./DurationInput";
 import { EnergyLevel } from "./EnergyLevel";
 import { FocusLevel } from "./FocusLevel";
-import { useSessions } from "@/lib/hooks/use-sessions";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@components/ui/select";
+} from "@/components/ui/select";
 
 const MAX_RECENT_ACTIVITIES = 5;
 
@@ -32,8 +33,12 @@ export function QuickEntry() {
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(
     null
   );
+  const [selectedChallengeId, setSelectedChallengeId] = useState<string | null>(
+    null
+  );
   const [timeEntries, setTimeEntries] = useTimeEntries();
   const [sessions, setSessions] = useSessions();
+  const [challenges] = useLocalStorage<Challenge[]>("challenges", []);
 
   const recentActivities = useMemo(() => {
     const activities = timeEntries.map((entry) => entry.activity);
@@ -55,6 +60,7 @@ export function QuickEntry() {
           duration: durationInMinutes,
           energyLevel,
           focusLevel,
+          challengeId: selectedChallengeId || undefined,
           tags: session.tags,
         };
         setTimeEntries([...timeEntries, newEntry]);
@@ -68,6 +74,7 @@ export function QuickEntry() {
         duration: durationInMinutes,
         energyLevel,
         focusLevel,
+        challengeId: selectedChallengeId || undefined,
         tags: [],
       };
       setTimeEntries([...timeEntries, newEntry]);
@@ -78,6 +85,7 @@ export function QuickEntry() {
     setEnergyLevel(3);
     setFocusLevel(3);
     setSelectedSessionId(null);
+    setSelectedChallengeId(null);
   };
 
   const handleActivityClick = (selectedActivity: string) => {
@@ -142,6 +150,22 @@ export function QuickEntry() {
         />
         <EnergyLevel value={energyLevel} onChange={setEnergyLevel} />
         <FocusLevel value={focusLevel} onChange={setFocusLevel} />
+        <Select
+          value={selectedChallengeId || ""}
+          onValueChange={setSelectedChallengeId}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select a challenge (optional)" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="optional">No challenge</SelectItem>
+            {challenges.map((challenge) => (
+              <SelectItem key={challenge.id} value={challenge.id}>
+                {challenge.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <Button type="submit" className="w-full">
           {selectedSessionId ? "Complete Session" : "Add Entry"}
         </Button>
