@@ -1,130 +1,104 @@
-# NextJS Modern Template
 
-Un template moderne et optimisé pour le développement d'applications web, conçu avec une architecture clean et les meilleures pratiques actuelles.
 
-## 🎯 Objectifs du Template
+ # TimeTrack & Challenge Logger
 
-- **Architecture Propre**: Séparation claire des responsabilités selon les principes de la Clean Architecture
-- **Performance**: Optimisé pour le SEO et les Core Web Vitals
-- **Maintenabilité**: Structure de code claire et testable
-- **Developer Experience**: Configuration complète des outils de développement
+## 📝 Vue d'ensemble
 
-## 🛠 Stack Technique
+TimeTrack & Challenge Logger est une application de suivi du temps et des défis personnels, conçue pour les développeurs souhaitant suivre leur progression et leurs objectifs. L'application offre une interface minimaliste mais puissante, avec une expérience utilisateur fluide et une approche "developer-friendly".
 
-### Core
-- **[Next.js 14](https://nextjs.org/)**: Framework React avec App Router et Server Components
-- **[TypeScript](https://www.typescriptlang.org/)**: Typage statique pour une meilleure maintenabilité
-- **[React 18](https://reactjs.org/)**: Dernière version avec Hooks et Concurrent Features
+## 🎯 Fonctionnalités principales
 
-### State Management & Data Fetching
-- **[Zustand](https://zustand-demo.pmnd.rs/)**: Gestion d'état minimaliste et performante
-- **[TanStack Query](https://tanstack.com/query)**: Gestion optimisée des requêtes et du cache
-- **[Zod](https://zod.dev)**: Validation de schémas TypeScript-first
+- Suivi facile du temps passé sur différentes activités
+- Création et suivi de défis personnels (ex: "30 jours de code")
+- Visualisation des tendances de productivité
+- Gestion des sessions de travail
+- Insights sur l'utilisation du temps
 
-### Styling
-- **[Tailwind CSS](https://tailwindcss.com/)**: Utilitaire CSS avec JIT compiler
-- **[shadcn/ui](https://ui.shadcn.com/)**: Composants réutilisables et accessibles
-- **[class-variance-authority](https://cva.style/)**: Gestion des variants de composants
-- **[tailwind-merge](https://github.com/dcastil/tailwind-merge)**: Fusion intelligente des classes Tailwind
-- **[Lucide Icons](https://lucide.dev/)**: Icônes modernes et personnalisables
+## 🚀 Installation
 
-### Testing
-- **[Vitest](https://vitest.dev/)**: Framework de test moderne et rapide
-- **[Testing Library](https://testing-library.com/)**: Tests centrés sur l'utilisateur
-- **[Jest](https://jestjs.io/)**: Support additionnel pour les tests
-
-### Developer Experience
-- **[ESLint](https://eslint.org/)**: Linting avec règles TypeScript
-- **[Prettier](https://prettier.io/)**: Formatage de code consistant
-- **[Husky](https://typicode.github.io/husky/)**: Git hooks automatisés
-- **[lint-staged](https://github.com/okonet/lint-staged)**: Linting des fichiers staged
-
-## 📁 Structure du Projet
-
-```
-.
-├── app/                  # Next.js App Router
-│   ├── layout.tsx       # Layout racine
-│   └── page.tsx         # Page d'accueil
-├── src/
-│   ├── core/            # Logique métier
-│   │   ├── entities/    # Modèles de données
-│   │   ├── repositories/# Interfaces de données
-│   │   └── use-cases/   # Logique métier
-│   ├── infrastructure/  # Implémentation technique
-│   └── ui/             # Composants React
-└── lib/                # Utilitaires partagés
-```
-
-## 🚀 Démarrage Rapide
+1. Clonez le dépôt :
 
 ```bash
-# Installation des dépendances
-pnpm install
 
-# Développement
-pnpm dev
+git clone [https://github.com/All-Khwarizmi/time-tracker.git](https://github.com/All-Khwarizmi/time-tracker.git)
 
-# Tests
-pnpm test
-
-# Build production
-pnpm build
 ```
+ 
 
-## 🧪 Testing
-
-Le projet utilise Vitest pour les tests unitaires et d'intégration :
+2. Naviguez dans le dossier du projet :
 
 ```bash
-# Lancer tous les tests
-pnpm test
 
-# Mode watch
-pnpm test:watch
+cd timetrack-challenge-logger
+
 ```
+ 
 
-## 📝 Conventions de Code
+3. Installez les dépendances :
 
-- **TypeScript**: Strict mode activé
-- **Import Aliases**: Chemins d'import simplifiés avec `@/`
-- **Components**: Un composant par fichier
-- **Testing**: Tests côté composants et logique métier
-- **State**: Zustand pour l'état global, React Query pour les données serveur
+```bash
 
-## 🎨 Design System
+npm install
 
-Le projet utilise shadcn/ui pour les composants UI :
+```
+ 
 
-- Composants accessibles (ARIA)
-- Thème personnalisable
-- Support dark/light mode
-- Animations fluides
+4. Lancez l'application en mode développement :
 
-## 🔒 Clean Architecture
+```bash
 
-L'architecture suit les principes SOLID :
+npm run dev
 
-1. **Core**: Logique métier pure
-2. **Infrastructure**: Implémentation technique
-3. **UI**: Composants et hooks React
-4. **App**: Routes et pages Next.js
+```
+ 
 
-## 📚 Documentation
+5. Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur pour voir l'application.
 
-- `/src/core/README.md`: Documentation de la logique métier
-- `/src/infrastructure/README.md`: Documentation technique
-- `/src/ui/README.md`: Guide des composants
+## 🖥 Utilisation
+
+- **Quick Entry** : Ajoutez rapidement une nouvelle entrée de temps.
+- **Start Session** : Commencez une nouvelle session de travail.
+- **Challenges** : Créez et gérez vos défis personnels.
+- **Time Insights** : Visualisez vos tendances d'utilisation du temps et la progression de vos défis.
+
+## 🛣 Roadmap
+
+### Version 1.1
+- [ ] Amélioration de la persistance des données
+- Implémentation d'une solution de stockage plus robuste (ex: IndexedDB)
+- Ajout d'une fonctionnalité de sauvegarde/restauration des données
+
+### Version 1.2
+- [ ] Authentification des utilisateurs
+- Mise en place d'un système d'authentification (ex: Auth0, Firebase Auth)
+- Profils utilisateurs personnalisés
+
+### Version 1.3
+- [ ] Synchronisation des données
+- Synchronisation des données entre différents appareils
+- Option de sauvegarde dans le cloud (ex: Google Drive, Dropbox)
+
+### Version 1.4
+- [ ] Rapports et analyses avancées
+- Génération de rapports hebdomadaires/mensuels
+- Visualisations de données plus détaillées (ex: heatmaps, graphiques de tendances)
+
+### Version 1.5
+- [ ] Intégrations externes
+- Intégration avec des outils de gestion de projet (ex: Trello, Jira)
+- Export des données vers des applications de calendrier
+
+### Version 2.0
+- [ ] Application mobile
+- Développement d'une version mobile native ou PWA
+- Synchronisation en temps réel entre les versions web et mobile
 
 ## 🤝 Contribution
 
-1. Fork le projet
-2. Créer une branche (`git checkout -b feature/AmazingFeature`)
-3. Commit les changements (`git commit -m 'Add AmazingFeature'`)
-4. Push la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrir une Pull Request
+Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou à soumettre une pull request.
 
-## 📄 License
+## 📄 Licence
 
-MIT
+Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+
 
