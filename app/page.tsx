@@ -5,6 +5,7 @@ import {
 } from "@/components/dashboard";
 import { ChallengeManager } from "@/components/dashboard/ChallengeManager";
 import { EntryManager } from "@/components/dashboard/EntryManager";
+import { TimeInsights } from "@/components/dashboard/TimeInsights";
 
 export default function DashboardPage() {
   return (
@@ -13,6 +14,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <QuickEntry />
         <RecentEntries />
+        <TimeInsights />
         <StartSession />
         <EntryManager />
         <ChallengeManager />
