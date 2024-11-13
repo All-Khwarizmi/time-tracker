@@ -1,30 +1,21 @@
 "use client";
 
-import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { v4 as uuidv4 } from "uuid";
 import { useSessions } from "@/lib/hooks/use-sessions";
-import { useTimeEntries } from "@/lib/hooks/use-time-entries";
 import { Session } from "@/lib/types";
 import { Clock } from "lucide-react";
-import { RecentActivitiesOptions } from "./RecentActivitiesOptions";
-
-const MAX_RECENT_ACTIVITIES = 5;
+import { RecentActivitiesOptions } from "./recent-activities/RecentActivitiesOptions";
+import useRecentActivities from "./recent-activities/hooks/useRecentActivities";
 
 export function StartSession() {
-  const [activity, setActivity] = useState("");
   const [sessions, setSessions] = useSessions();
-  const [timeEntries] = useTimeEntries();
-
-  const recentActivities = useMemo(() => {
-    const activities = [
-      ...sessions.map((session) => session.activity),
-      ...timeEntries.map((entry) => entry.activity),
-    ];
-    return Array.from(new Set(activities)).slice(0, MAX_RECENT_ACTIVITIES);
-  }, [sessions, timeEntries]);
+  const {
+    data: { activity, recentActivities },
+    functions: { handleActivityClick, setActivity },
+  } = useRecentActivities();
 
   const handleStartSession = (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,10 +27,6 @@ export function StartSession() {
     };
     setSessions([...sessions, newSession]);
     setActivity("");
-  };
-
-  const handleActivityClick = (selectedActivity: string) => {
-    setActivity(selectedActivity);
   };
 
   return (
