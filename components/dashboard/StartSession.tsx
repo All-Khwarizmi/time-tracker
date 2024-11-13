@@ -9,6 +9,7 @@ import { useSessions } from "@/lib/hooks/use-sessions";
 import { useTimeEntries } from "@/lib/hooks/use-time-entries";
 import { Session } from "@/lib/types";
 import { Clock } from "lucide-react";
+import { RecentActivitiesOptions } from "./RecentActivitiesOptions";
 
 const MAX_RECENT_ACTIVITIES = 5;
 
@@ -58,19 +59,7 @@ export function StartSession() {
             className="w-full"
           />
         </div>
-        <div className="flex flex-wrap gap-2">
-          {recentActivities.map((recentActivity) => (
-            <Button
-              key={recentActivity}
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => handleActivityClick(recentActivity)}
-            >
-              {recentActivity}
-            </Button>
-          ))}
-        </div>
+        {RecentActivitiesOptions(recentActivities, handleActivityClick)}
         <Button type="submit" className="w-full">
           Start Session
         </Button>
