@@ -1,7 +1,7 @@
 // components/dashboard/quick-entry.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { v4 as uuidv4 } from "uuid";
@@ -19,6 +19,8 @@ import { LocationInput } from "./LocationInput";
 import { NotesInput } from "./NotesInput";
 import { RecentActivitiesOptions } from "./recent-activities/RecentActivitiesOptions";
 import useRecentActivities from "./recent-activities/hooks/useRecentActivities";
+import { ActiveSessionSelect } from "./ActiveSessionSelect";
+import { useSessions } from "@/lib/hooks/use-sessions";
 
 export function QuickEntry() {
   const {
@@ -40,18 +42,57 @@ export function QuickEntry() {
   const [tags, setTags] = useState<string[]>([]);
   const [location, setLocation] = useState("");
   const [notes, setNotes] = useState("");
+  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(
+    null
+  );
+  const [sessions, setSessions] = useSessions();
   const [timeEntries, setTimeEntries] = useTimeEntries();
   const [challenges] = useLocalStorage<Challenge[]>("challenges", []);
   const [timeInputMethod] = useState<"precise" | "duration">("precise");
+
+  useEffect(() => {
+    if (selectedSessionId) {
+      const session = sessions.find((s) => s.id === selectedSessionId);
+      if (session) {
+        setActivity(session.activity);
+        setStartTime(new Date(session.startTime));
+        setTags(session.tags);
+      }
+    }
+  }, [selectedSessionId, sessions]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     let newEntry: TimeEntry;
 
-    if (timeInputMethod === "precise") {
+    if (selectedSessionId) {
+      const session = sessions.find((s) => s.id === selectedSessionId);
+      if (session) {
+        const durationInMinutes = Math.round(
+          (endTime.getTime() - new Date(session.startTime).getTime()) / 60000
+        );
+        newEntry = {
+          id: uuidv4(),
+          date: date?.toISOString().split("T")[0] ?? "",
+          activity: session.activity,
+          startTime: session.startTime,
+          endTime: endTime.toISOString(),
+          duration: durationInMinutes,
+          energyLevel,
+          focusLevel,
+          challengeId: selectedChallengeId || undefined,
+          tags: session.tags,
+          location: location || undefined,
+          notes: notes || undefined,
+        };
+        setSessions(sessions.filter((s) => s.id !== selectedSessionId));
+      } else {
+        return; // Should not happen, but just in case
+      }
+    } else if (timeInputMethod === "precise") {
       const calculatedDuration = Math.round(
         (endTime.getTime() - startTime.getTime()) / 60000
-      ); // Duration in minutes
+      );
       newEntry = {
         id: uuidv4(),
         date: date?.toISOString().split("T")[0] ?? "",
@@ -101,6 +142,7 @@ export function QuickEntry() {
     setEnergyLevel(3);
     setFocusLevel(3);
     setSelectedChallengeId(null);
+    setSelectedSessionId(null);
     setTags([]);
     setLocation("");
     setNotes("");
@@ -115,6 +157,12 @@ export function QuickEntry() {
           recentActivities={recentActivities}
           handleActivityClick={handleActivityClick}
         />
+        <ActiveSessionSelect
+          sessions={sessions}
+          selectedSessionId={selectedSessionId}
+          onSessionSelect={setSelectedSessionId}
+        />
+
         <DatePicker
           selected={date}
           onChange={(newDate) => setDate(newDate)}
