@@ -46,7 +46,10 @@ export function StartSession() {
             className="w-full"
           />
         </div>
-        {RecentActivitiesOptions(recentActivities, handleActivityClick)}
+        <RecentActivitiesOptions
+          recentActivities={recentActivities}
+          handleActivityClick={handleActivityClick}
+        />
         <Button type="submit" className="w-full">
           Start Session
         </Button>

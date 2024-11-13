@@ -17,9 +17,14 @@ import { TimeInputTabs } from "./TimeInputTabs";
 import { ChallengeSelect } from "./ChallengeSelect";
 import { LocationInput } from "./LocationInput";
 import { NotesInput } from "./NotesInput";
+import { RecentActivitiesOptions } from "./recent-activities/RecentActivitiesOptions";
+import useRecentActivities from "./recent-activities/hooks/useRecentActivities";
 
 export function QuickEntry() {
-  const [activity, setActivity] = useState("");
+  const {
+    data: { activity, recentActivities },
+    functions: { handleActivityClick, setActivity },
+  } = useRecentActivities();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [startTime, setStartTime] = useState<Date>(new Date());
   const [endTime, setEndTime] = useState<Date>(new Date());
@@ -106,6 +111,10 @@ export function QuickEntry() {
       <h2 className="text-lg font-semibold mb-4">Quick Entry</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <ActivityInput value={activity} onChange={setActivity} />
+        <RecentActivitiesOptions
+          recentActivities={recentActivities}
+          handleActivityClick={handleActivityClick}
+        />
         <DatePicker
           selected={date}
           onChange={(newDate) => setDate(newDate)}
